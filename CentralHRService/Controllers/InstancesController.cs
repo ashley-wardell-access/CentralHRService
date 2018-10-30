@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CentralHRService.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace CentralHRService.Controllers
 {
@@ -13,9 +14,14 @@ namespace CentralHRService.Controllers
     [ApiController]
     public class InstancesController : ControllerBase
     {
+        private readonly IConfiguration configuration;
+        public InstancesController(IConfiguration config)
+        {
+            configuration = config;
+        }
         [HttpPost]
         public void InstancePing(InstanceViewModel instanceViewModel) {
-            using (SqlConnection connection = new SqlConnection("RICHARD I NEED CONNECTION STRING"))
+            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
             {
                 String query = "INSERT INTO [dbo].[HRInstances]"+
                         "([InstanceName]"+
