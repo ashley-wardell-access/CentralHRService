@@ -15,7 +15,7 @@ namespace CentralHRService.Controllers
     {
         [HttpPost]
         public void InstancePing(InstanceViewModel instanceViewModel) {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = new SqlConnection("RICHARD I NEED CONNECTION STRING"))
             {
                 String query = "INSERT INTO [dbo].[HRInstances]"+
                         "([InstanceName]"+
