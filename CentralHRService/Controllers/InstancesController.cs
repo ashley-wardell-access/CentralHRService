@@ -63,6 +63,7 @@ namespace CentralHRService.Controllers
                             Console.WriteLine("Error inserting data into Database!");
                     }
                 }
+                return "";
             }
             catch (Exception x) {
                 return x.Message + x.StackTrace + x.InnerException?.Message;
