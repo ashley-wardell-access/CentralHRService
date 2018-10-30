@@ -20,46 +20,52 @@ namespace CentralHRService.Controllers
             configuration = config;
         }
         [HttpPost]
-        public void InstancePing(InstanceViewModel instanceViewModel) {
-            using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+        public string InstancePing(InstanceViewModel instanceViewModel) {
+            try
             {
-                String query = "INSERT INTO [dbo].[HRInstances]"+
-                        "([InstanceName]"+
-                           ",[LicenseGuid]"+
-                           ",[LastRunSSUGuid]"+
-                           ",[VersionMajor]"+
-                           ",[VersionMinor]"+
-                           ",[Build]"+
-                           ",[Revision]"+
-                           ",[LastPing])"+
-                     "VALUES"+
-                           "(@InstanceName"+
-                           ", @LicenseGuid"+
-                           ", @LastRunSSUGuid"+
-                           ", @VersionMajor"+
-                           ", @VersionMinor"+
-                           ", @Build"+
-                           ", @Revision"+
-                           ", @LastPing)";
-
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
                 {
-                    command.Parameters.AddWithValue("@InstanceName", instanceViewModel.InstanceName);
-                    command.Parameters.AddWithValue("@LicenseGuid", instanceViewModel.LicenseGuid);
-                    command.Parameters.AddWithValue("@LastRunSSUGuid", instanceViewModel.LastRunSSUGuid);
-                    command.Parameters.AddWithValue("@VersionMajor", instanceViewModel.VersionMajor);
-                    command.Parameters.AddWithValue("@VersionMinor", instanceViewModel.VersionMinor);
-                    command.Parameters.AddWithValue("@Build", instanceViewModel.Build);
-                    command.Parameters.AddWithValue("@Revision", instanceViewModel.Revision);
-                    command.Parameters.AddWithValue("@LastPing", instanceViewModel.LastPing);
+                    String query = "INSERT INTO [dbo].[HRInstances]" +
+                            "([InstanceName]" +
+                               ",[LicenseGuid]" +
+                               ",[LastRunSSUGuid]" +
+                               ",[VersionMajor]" +
+                               ",[VersionMinor]" +
+                               ",[Build]" +
+                               ",[Revision]" +
+                               ",[LastPing])" +
+                         "VALUES" +
+                               "(@InstanceName" +
+                               ", @LicenseGuid" +
+                               ", @LastRunSSUGuid" +
+                               ", @VersionMajor" +
+                               ", @VersionMinor" +
+                               ", @Build" +
+                               ", @Revision" +
+                               ", @LastPing)";
 
-                    connection.Open();
-                    int result = command.ExecuteNonQuery();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@InstanceName", instanceViewModel.InstanceName);
+                        command.Parameters.AddWithValue("@LicenseGuid", instanceViewModel.LicenseGuid);
+                        command.Parameters.AddWithValue("@LastRunSSUGuid", instanceViewModel.LastRunSSUGuid);
+                        command.Parameters.AddWithValue("@VersionMajor", instanceViewModel.VersionMajor);
+                        command.Parameters.AddWithValue("@VersionMinor", instanceViewModel.VersionMinor);
+                        command.Parameters.AddWithValue("@Build", instanceViewModel.Build);
+                        command.Parameters.AddWithValue("@Revision", instanceViewModel.Revision);
+                        command.Parameters.AddWithValue("@LastPing", instanceViewModel.LastPing);
 
-                    // Check Error
-                    if (result < 0)
-                        Console.WriteLine("Error inserting data into Database!");
+                        connection.Open();
+                        int result = command.ExecuteNonQuery();
+
+                        // Check Error
+                        if (result < 0)
+                            Console.WriteLine("Error inserting data into Database!");
+                    }
                 }
+            }
+            catch (Exception x) {
+                return x.Message + x.StackTrace + x.InnerException?.Message;
             }
         }
     }
