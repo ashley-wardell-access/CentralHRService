@@ -23,7 +23,7 @@ namespace CentralHRService.Controllers
         public string InstancePing(InstanceViewModel instanceViewModel) {
             try
             {
-                using (SqlConnection connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection")))
+                using (SqlConnection connection = new SqlConnection("Server=tcp:centralhr.database.windows.net,1433;Initial Catalog=CentralHR;Persist Security Info=False;User ID=centralhr;Password=Patrick@1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"))
                 {
                     String query = "INSERT INTO [dbo].[HRInstances]" +
                             "([InstanceName]" +
